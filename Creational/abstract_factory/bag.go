@@ -18,7 +18,7 @@ type CasualBag struct {
 func (cb CasualBag) GetBagStyle() string {
 	return "casualBag"
 }
-
+//抽象工厂模式不需要定义具体类的工厂方法，具体类的选择由更高层次的客户端类设计
 ////定义背包生成工厂
 //type BagFactory interface {
 //	GetBag() IBag

@@ -18,7 +18,7 @@ type CasualCloth struct {
 func (cc CasualCloth) GetClothStyle() string {
 	return "casualCloth"
 }
-
+//抽象工厂模式不需要定义具体类的工厂方法，具体类的选择由更高层次的客户端类决定
 ////定义衣服生成工厂
 //type ClothFactory interface {
 //	GetCloth() ICloth
