@@ -1,4 +1,4 @@
-package simpleFatory
+package factory_method
 
 import "testing"
 
