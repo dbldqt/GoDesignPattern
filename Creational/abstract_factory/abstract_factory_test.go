@@ -2,14 +2,14 @@ package abstract_factory
 
 import "testing"
 
-func TestAbstrctFactory(t *testing.T) {
-	sportDress := NewDress(SportDressFactory{})
-	if sportDress.Cloth.GetClothStyle() != "sportCloth" || sportDress.Bag.GetBagStyle() != "sportBag"{
-		t.Error("sport dress fail")
+func TestBenzFactory(t *testing.T) {
+	bmwF := BwmFatcory{}
+	if bmwF.CreateMpv().GetModel() != "BmwMpv" || bmwF.CreateSuv().GetModel() != "BmwSuv"{
+		t.Error("BMW factory error")
 	}
 
-	casualDress := NewDress(CasualDressFactory{})
-	if casualDress.Cloth.GetClothStyle() != "casualCloth" || casualDress.Bag.GetBagStyle() != "casualBag" {
-		t.Error("casual dress fail")
+	benzF := BenzFactory{}
+	if benzF.CreateSuv().GetModel() != "BenzSuv" || benzF.CreateMpv().GetModel() != "BenzMpv"{
+		t.Error("Benz factory error")
 	}
 }

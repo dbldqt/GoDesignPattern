@@ -3,15 +3,15 @@ package factory_method
 import "testing"
 
 func TestNewClass(t *testing.T) {
-	if (&FactoryC{}).GetInstance().GetClassName() != "classC"{
-		t.Error("classC fail")
+	bmwF := BmwFactory{}
+	if bmwF.CreateCar().GetCarBrand() != "Bmw" {
+		t.Error("Bmw factory fail")
 	}
 
-	if (&FactoryB{}).GetInstance().GetClassName() != "classB"{
-		t.Error("classB fail")
+	benzF := BenzFactory{}
+	if benzF.CreateCar().GetCarBrand() != "Benz"{
+		t.Error("Benz factory fail")
 	}
 
-	if (&FactoryA{}).GetInstance().GetClassName() != "classA"{
-		t.Error("classA fail")
-	}
+	//如果需要其他品牌的车，则只需定义新的汽车品牌和汽车工厂即可，无需改动现有代码
 }
