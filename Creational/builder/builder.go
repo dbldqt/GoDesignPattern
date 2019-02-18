@@ -12,15 +12,15 @@ type CarBuilder struct {
 	carBlueprint *CarBluePrint
 }
 
-func (cb CarBuilder) buildWheel() string {
+func (cb *CarBuilder) buildWheel() string {
 	return cb.carBlueprint.GetWheel()
 }
 
-func (cb CarBuilder) buildEngine() string {
+func (cb *CarBuilder) buildEngine() string {
 	return cb.carBlueprint.GetEngine()
 }
 
-func (cb CarBuilder) SetBlueprint(bp *CarBluePrint) bool{
+func (cb *CarBuilder) SetBlueprint(bp *CarBluePrint) bool{
 	if bp != nil{
 		cb.carBlueprint = bp
 		return true
@@ -29,6 +29,6 @@ func (cb CarBuilder) SetBlueprint(bp *CarBluePrint) bool{
 	}
 }
 
-func (cb CarBuilder) BuildCar() ICar{
+func (cb *CarBuilder) BuildCar() ICar{
 	return NewCar(cb.carBlueprint.GetWheel(),cb.carBlueprint.GetEngine())
 }

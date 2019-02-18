@@ -4,12 +4,12 @@ import "testing"
 
 func TestCarBuilder_BuildCar(t *testing.T) {
 	director := Director{
-		carBuilder:CarBuilder{},
+		CarBuilder:&CarBuilder{},
 	}
 
 	//给我一辆奔驰suv
 	benzSuv := director.CreateBenzSuv()
-	if benzSuv.GetWheel() != "bbenz的轮胎" || benzSuv.GetEngine() != "benz的引擎"{
+	if benzSuv.GetWheel() != "benz的轮胎" || benzSuv.GetEngine() != "benz的引擎"{
 		t.Error("benzSuv error")
 	}
 

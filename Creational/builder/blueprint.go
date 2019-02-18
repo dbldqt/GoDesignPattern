@@ -13,22 +13,26 @@ type CarBluePrint struct {
 	engine string
 }
 
-func (blue CarBluePrint) GetWheel() string{
+func (blue *CarBluePrint) GetWheel() string{
 	return blue.wheel
 }
 
-func (blue CarBluePrint) GetEngine() string{
+func (blue *CarBluePrint) GetEngine() string{
 	return blue.engine
 }
-
-func (blue CarBluePrint) SetWheel(wheel string){
+//此处要使用指针接收者，否则操作的是副本，该对象本身不会变化
+func (blue *CarBluePrint) SetWheel(wheel string){
 	blue.wheel = wheel
 }
 
-func (blue CarBluePrint) SetEngine(engine string){
+func (blue *CarBluePrint) SetEngine(engine string){
 	blue.engine = engine
 }
 
+func NewCarBlueprint() *CarBluePrint{
+	blueprint := CarBluePrint{}
+	return &blueprint
+}
 
 
 

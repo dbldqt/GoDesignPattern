@@ -5,7 +5,7 @@ package builder
 设计了一个蓝图，然后命令建造车间拼命加班加点建造，最终返回给你一件最新出品的产品
  */
 type Director struct {
-	carBuilder ICarBuilder
+	CarBuilder ICarBuilder
 }
 
 func mopCreateCar(carBuilder ICarBuilder,engine string,wheel string) ICar{
@@ -17,15 +17,15 @@ func mopCreateCar(carBuilder ICarBuilder,engine string,wheel string) ICar{
 }
 
 func (d Director) CreateBenzSuv() ICar {
-	return mopCreateCar(d.carBuilder,"benz的引擎","benz的轮胎")
+	return mopCreateCar(d.CarBuilder,"benz的引擎","benz的轮胎")
 }
 
 func (d Director) CreateBWMVan() ICar{
-	return mopCreateCar(d.carBuilder,"BMW的引擎","BMW的轮胎")
+	return mopCreateCar(d.CarBuilder,"BMW的引擎","BMW的轮胎")
 }
 
 func (d Director) CreateComplexCar() ICar{
-	return mopCreateCar(d.carBuilder,"BMW的引擎","benz的轮胎")
+	return mopCreateCar(d.CarBuilder,"BMW的引擎","benz的轮胎")
 }
 
 
