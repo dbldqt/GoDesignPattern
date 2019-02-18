@@ -9,11 +9,11 @@ type StructParent struct {
 	Name string
 }
 
-func (sp StructParent) M1(name1 string) {
+func (sp StructParent) ValueMethod(name1 string) {
 	sp.Name = name1
 }
 
-func (sp *StructParent) M2(name2 string) {
+func (sp *StructParent) PointerMehtod(name2 string) {
 	sp.Name = name2
 }
 
