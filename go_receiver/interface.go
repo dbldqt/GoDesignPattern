@@ -1,4 +1,4 @@
-package main
+package go_receiver
 //定义接口
 type IMethod interface {
 	ValueMethod(name1 string)

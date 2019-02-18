@@ -1,33 +1,46 @@
-package main
+package go_receiver
 
-func main(){
-	/**
-		接收者可以看作是函数的第一个参数，
-		即这样的： func M1(t T), func M2(t *T)。
-		go不是完全的面向对象的语言，所以用那种看起来像面向对象的语法来理解可能有偏差。
+import "testing"
 
-		当调用 t1.M1() 时相当于 M1(t1) ，实参和行参都是类型 T，可以接受。
-		此时在M1()中的t只是t1的值拷贝，所以M1()的修改影响不到t1。
+func TestInterfaceReceiver(t *testing.T){
+	var im IMethod  					 		 //接口变量
+	sp := StructParent{"name0"}           //实现接口的结构体
+	psp := &sp                                   //实现接口的结构体的指针
+	sc := StructChild{sp}            //内嵌实现接口的匿名结构体的结构体
+	psc := PointerStructChild{psp}   //内嵌实现接口的匿名结构体指针的结构体
 
-		当调用 t1.M2() => M2(t1)，这时编译器自动将 T 类型传给了 *T 类型，
-		go可能会取 t1 的地址传进去： M2(&t1)。所以 M2() 的修改可以影响 t1 。
- 	*/
+	//接收者可以看作是函数的第一个参数，
+	//即这样的： func M1(t T), func M2(t *T)。
+	//编译器在需要的时候会自动进行sp和psp之间的转换，但是请注意，psp任何情况下均可以转换为sp，但是sp并不总能获得其地址并转换为psp
 
-	var im IMethod
-	sp := StructParent{"name0"}
-	sc := StructChild{sp}
-	psc := PointerStructChild{&sp}
 
+	//当调用 sp.ValueMethod() 时相当于 ValueMethod(sp) ，实参和行参都是类型StructParent，可以接受。
+	//此时在ValueMethod()中的sp只是sp的值拷贝，所以ValueMethod()的修改影响不到sp
 	sp.ValueMethod("name1")
-	println(sp.Name)
-	//m1 := T{"name0"}
-	//m1.M1("name")
-	//if m1.Name == "name"{     //M1是值接受者，无法改变本对象的值
-	//
-	//}
-	//m1.M2("name2")
-	//if m1.Name != "name2"{    //M2是指针接受者，
-	//}
+	if sp.Name == "name1"{
+		t.Error("sp.ValueMethod error "+sp.Name)
+	}
+
+	//使用结构体的指针一样可以调用值接受者实现的方法，此时编译器会转换为*psp,一样无法改变对象的Name值
+	psp.ValueMethod("name1")
+	if psp.Name == "name1"{
+		t.Error("psp.ValueMethod error "+psp.Name)
+	}
+
+	//当调用 sp.PointerMehtod() 相当于PointerMehtod(&sp)，这时编译器自动将sp类型传给了&sp，
+	//此时编译器依然会复制&sp的值作为参数传递给PointerMethod(),只是复制的是指针的值，指针依然只想sp，所以sp的值会被改变
+	sp.PointerMehtod("name2")
+	if sp.Name != "name2"{
+		t.Error("sp.PointerMethod error "+sp.Name)
+	}
+
+	//使用psp调用时，因为跟生命的接受者一致所以编译器无需进行转换，其结果跟使用sp调用一致
+	psp.PointerMehtod("name2")
+	if psp.Name != "name2"{
+		t.Error("psp.PointerMethod error "+psp.Name)
+	}
+
+
 
 
 
@@ -35,12 +48,8 @@ func main(){
 	im.PointerMehtod("name1")
 	sc.PointerMehtod("name1")
 	psc.PointerMehtod("name1")
-	//
-	//
-	//
-
-	//
-	///*
+}
+func main(){
 	//t2.M1() 相当于M1(t2)， t2 是指针类型，编译器自动转换，取 t2 的值并拷贝一份传给 M1。
 	//t2.M2() 相当于M2(t2)，都是指针类型，不需要转换。
 	//*T 类型的变量也是拥有这两个方法的。
