@@ -86,4 +86,5 @@ func TestInterfaceReceiver(t *testing.T){
 	im = psp  //psp可以赋值给接口变量，因为通过变量指针总能获得其变量
 	//im = sc   sc同sp一样不能赋值给im
 	im = psc  //psc同psp一样可以赋值给im
+	im.ValueMethod("name0")
 }
