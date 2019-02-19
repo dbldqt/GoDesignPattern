@@ -9,10 +9,11 @@ func TestInterfaceReceiver(t *testing.T){
 	sc := StructChild{sp}            //内嵌实现接口的匿名结构体的结构体
 	psc := PointerStructChild{psp}   //内嵌实现接口的匿名结构体指针的结构体
 
+	//go语言默认所有的参数都是值拷贝传递,
+	//当参数为值类型则会赋值一份，参数为指针虽然也会复制一份，但是复制的指针已然只想原来的变量
 	//接收者可以看作是函数的第一个参数，
 	//即这样的： func M1(t T), func M2(t *T)。
 	//编译器在需要的时候会自动进行sp和psp之间的转换，但是请注意，psp任何情况下均可以转换为sp，但是sp并不总能获得其地址并转换为psp
-
 
 	//当调用 sp.ValueMethod() 时相当于 ValueMethod(sp) ，实参和行参都是类型StructParent，可以接受。
 	//此时在ValueMethod()中的sp只是sp的值拷贝，所以ValueMethod()的修改影响不到sp
@@ -40,76 +41,49 @@ func TestInterfaceReceiver(t *testing.T){
 		t.Error("psp.PointerMethod error "+psp.Name)
 	}
 
+	//重置sp的值为初始值，便于后续测试
+	sp.PointerMehtod("name0")
 
+	//此处因为psp是sp的指针，所以这两个的状态始终同步
+	if sp.Name != psp.Name{
+		t.Error("sp not equal psp error "+sp.Name+" "+psp.Name)
+	}
+	sp.PointerMehtod("name2")
+	if sp.Name != psp.Name{
+		t.Error("sp not equal psp error "+sp.Name+" "+psp.Name)
+	}
+	psp.PointerMehtod("name1")
+	if sp.Name != psp.Name{
+		t.Error("sp not equal psp error "+sp.Name+" "+psp.Name)
+	}
 
+	//重置sp的值为初始值，便于后续测试
+	sp.PointerMehtod("name0")
 
+	sp.PointerMehtod("name1")
+	//此处表明，虽然sp作为sc的匿名内置对象，但是sc中的sp并不是最初的sp，而是sp的一个副本，
+	if sp.Name == sc.Name{
+		t.Error("sp.Name equal sc.Name error"+sp.Name+" "+sc.Name)
+	}
+	//此处表明psc中的psp虽然是psp的复本，但是跟psp一样都只想sp，所以值同步
+	if sp.Name != psc.Name{
+		t.Error("sp.Name not equal psc.Name error"+sp.Name+" "+sc.Name)
+	}
 
-	im = &sp
-	im.PointerMehtod("name1")
+	//重置sp的值为初始值，便于后续测试
+	sp.PointerMehtod("name0")
+	//下面的测试再次证明上面的情况
 	sc.PointerMehtod("name1")
-	psc.PointerMehtod("name1")
-}
-func main(){
-	//t2.M1() 相当于M1(t2)， t2 是指针类型，编译器自动转换，取 t2 的值并拷贝一份传给 M1。
-	//t2.M2() 相当于M2(t2)，都是指针类型，不需要转换。
-	//*T 类型的变量也是拥有这两个方法的。
-	// */
-	//m2 := &T{"name0"}
-	//m2.M1("name1")
-	//if m2.Name != "name0"{
-	//}
-	//m2.M2("name2")
-	//if m2.Name != "name2"{
-	//}
-	////给定指针必定能得到变量，给定变量不一定能得到指针
-	//
-	//var interf Interf
-	//m := T{"name0"}
-	//
-	////interf = m  m无法作为Interf的子类使用，因为T的M2是用的指针接受者实现的
-	//interf = &m  //m的引用可以作为Interf的子类使用，虽然M1使用值接收者实现
-	////给定指针必定能够找到变量，编译器会自动进项转换
-	////给定变量不一定能获取变量的指针
-	//interf.M1("name1")
-	//
-	//m := T{"name0"}
-	//s := S{m}           //此处嵌入的并不是m本身，而是m的拷贝
-	//sm := SM{&m}        //此处将m的指针嵌入，虽然也是指针的拷贝，但是该拷贝依然指向m
-	//
-	////将 T 嵌入 S， 那么 T 拥有的方法和属性 S 也是拥有的，但是接收者却不是 S 而是 T。
-	////s.M1() 相当于 M1(t1) 而不是 M1(s)
-	////最后 t1 的值没有改变，因为我们嵌入的是 T 类型，所以 S{t1} 的时候是将 t1 拷贝了一份。
-	//
-	//s.M1("name1")
-	//sm.M1("name1")
-	//
-	//if s.Name != s.T.Name{
-	//}
-	//if sm.Name != sm.T.Name{
-	//}
-	//
-	//if s.Name == "name1" || m.Name == "name1"{
-	//}
-	//if sm.Name == "name1" || m.Name == "name1"{
-	//}
-	//
-	//
-	//s.M2("name2")
-	//sm.M2("name2")
-	//
-	//if s.Name != s.T.Name{
-	//}
-	//if sm.Name != sm.T.Name{
-	//}
-	//
-	//if s.Name != "name2" || m.Name != "name2"{
-	//}
-	//if sm.Name != "name2" || m.Name != "name2"{
-	//}
-	//
-	//m := T{"name0"}
-	//s := S{m}
-	////interf = s   s无法作为Interf的子类使用，因为T的M2是用的指针接受者实现的
-	//interf = &s  //s的引用可以作为Interf的子类使用，这一点跟不嵌套的T一样
-	//interf.M1("name1")
+	if sp.Name == sc.Name{
+		t.Error("sp.Name equal sc.Name error"+sp.Name+" "+sc.Name)
+	}
+	psc.PointerMehtod("name2")
+	if sp.Name != psc.Name{
+		t.Error("sp.Name not equal psc.Name error"+sp.Name+" "+sc.Name)
+	}
+
+	//im = sp sp不能赋值给接口变量，因为sp并未完全实现该接口（变量并不总能获得其指针）
+	im = psp  //psp可以赋值给接口变量，因为通过变量指针总能获得其变量
+	//im = sc   sc同sp一样不能赋值给im
+	im = psc  //psc同psp一样可以赋值给im
 }
