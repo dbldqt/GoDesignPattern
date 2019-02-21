@@ -14,7 +14,7 @@ type CriteriaMale struct {
 }
 
 func (cm *CriteriaMale) meetCriteria(persons []Person) []Person {
-	malePersons := make([]Person,len(persons))
+	malePersons := []Person{}
 	for _,person := range persons{
 		if strings.ToLower(person.gender) == "male"{
 			malePersons = append(malePersons,person)
@@ -32,7 +32,7 @@ type CriteriaFemale struct {
 }
 
 func (cfm *CriteriaFemale) meetCriteria(persons []Person) []Person {
-	femalePersons := make([]Person,len(persons))
+	femalePersons := []Person{}
 	for _,person := range persons{
 		if strings.ToLower(person.gender) == "female"{
 			femalePersons = append(femalePersons,person)
@@ -50,7 +50,7 @@ type CriteriaSingle struct {
 }
 
 func (sc *CriteriaSingle) meetCriteria(persons []Person) []Person {
-	singlePersons := make([]Person,len(persons))
+	singlePersons := []Person{}
 	for _,person := range persons{
 		if strings.ToLower(person.maritalStatus) == "single"{
 			singlePersons = append(singlePersons,person)
