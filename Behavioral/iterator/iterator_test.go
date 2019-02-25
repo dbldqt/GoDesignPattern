@@ -1,13 +1,13 @@
-package main
+package iterator
 
 import (
-	"GoDesignPattern/Behavioral/iterator"
 	"fmt"
 	"strconv"
+	"testing"
 )
 
-func main() {
-	container := iterator.NewContainer()
+func TestNewContainer(t *testing.T) {
+	container := NewContainer()
 	container.Append(1)
 	container.Append(2)
 	container.Append(3)
@@ -20,8 +20,3 @@ func main() {
 		fmt.Println(strconv.Itoa(obj))
 	}
 }
-
-
-
-
-
