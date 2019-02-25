@@ -1,28 +1,27 @@
 package main
 
-import "GoDesignPattern/Creational/builder"
+import (
+	chian "GoDesignPattern/Behavioral/chain_of_responsibility"
+)
 
-func main(){
-	director := builder.Director{
-		CarBuilder:builder.CarBuilder{},
-	}
+func GetChainLogger() chian.ILogger{
+	errorLogger := chian.ErrorLogger{chian.BaseLogger{Level:chian.ERROR}}
+	fileLogger := chian.FileLogger{chian.BaseLogger{Level:chian.DEBUG}}
+	consoleLogger := chian.ConsoleLogger{chian.BaseLogger{Level:chian.INFO}}
 
-	//给我一辆奔驰suv
-	benzSuv := director.CreateBenzSuv()
-	if benzSuv.GetWheel() != "bbenz的轮胎" || benzSuv.GetEngine() != "benz的引擎"{
-		println("benzSuv error")
-	}
-
-	//给我一辆宝马商务车
-	bmwVan := director.CreateBWMVan()
-	if bmwVan.GetWheel() != "BMW的轮胎" || bmwVan.GetEngine() != "BMW的引擎"{
-		println("benzSuv error")
-	}
-
-	//给我一辆混合车型
-	complexCar := director.CreateComplexCar()
-	if complexCar.GetWheel() != "benz的轮胎" || complexCar.GetEngine() != "BMW的引擎"{
-		println("benzSuv error")
-	}
+	errorLogger.SetNexLogger(&fileLogger)
+	fileLogger.SetNexLogger(&consoleLogger)
+	return &errorLogger
 }
+
+func main() {
+	chainLogger := GetChainLogger()
+	chainLogger.LogMessage(chian.INFO,"info")
+	chainLogger.LogMessage(chian.ERROR,"error")
+	chainLogger.LogMessage(chian.DEBUG,"debug")
+}
+
+
+
+
 
